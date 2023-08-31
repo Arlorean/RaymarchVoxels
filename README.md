@@ -1,6 +1,6 @@
 # Raymarch Voxels 
 
-Render a voxel models in Unity URP by rendering a cube volume and raymarching a 3D texture to display the voxels.
+Render voxel models in Unity URP by rendering a cube volume and raymarching a 3D texture to display the voxels.
 
 ![Demo Scene](/Images/DemoScene.png)
 
@@ -26,7 +26,7 @@ The code used the [Unity URP Cookbook Volumetric cloud rendering](https://www.yo
 
 URP was chosen so as to eventually be able to display this in WebGL.
 
-The modified Shader Graph uses the ```View Direction``` node instead of the camera node (I was trying to get shadows to work). The underlying shader calulates the RawDepth (```SV_Depth```) but there is no where to feed it into the URP Fragment lighting block at the end.
+The modified Shader Graph uses the ```View Direction``` node instead of the camera node (I was trying to get shadows to work). The underlying shader calulates the RawDepth (```SV_Depth```) but there is no where to feed it into the URP ```Fragment``` lighting block at the end.
 
 ![Shader Graph](/Images/ShaderGraph.png)
 
@@ -40,15 +40,22 @@ Here is the original Wizard voxel file so you can see what it looks like in 3D:
 
 ![Voxel in 3D](/Images/Wizard.gif)
 
-The [Arlorean/Voxels](https://github.com/Arlorean/Voxels) project command line utility was used to create the 3D textures. Run it with the ```--3D``` command line argument, e.g. ```Voxels.CommandLine.exe --3D Nerds.qb```.
+The [Arlorean/Voxels](https://github.com/Arlorean/Voxels) project command line utility was used to create the 3D textures. Run it with the ```--3D``` command line argument supplying a ```.vox``` Magica Voxel file or a ```.qb``` Qubicle Export File:
 
-The import settings for the texture should be set to 3D, Point Filter, No MipMaps, No compression and Non-Power of 2. The Colums and Rows specify how the whole image is broken up into a grid of Z slices:
+```
+Voxels.CommandLine.exe --3D Nerds.qb
+Voxels.CommandLine.exe --3D chr_knight.vox
+```
+
+The import settings for the texture should be set to ```3D```, ```Clamp```, ```Point Filter```, ```No MipMaps```, ```No compression``` and ```Non-Power of 2``` set to ```None```. The ```Columns``` and ```Rows``` specify how the whole image is broken up into a grid of Z slices which are the numbers shown in round brackets on the generated .png file, e.g. ```Nerds.(45x1).png``` for ```45 Columns``` and ```1 Row```:
 
 ![Texture Import Settings](/Images/TextureImportSettings.png)
 
-To display in Unity, create a 1x1x1 Cube from the context menu->3D Obect->Cube. Create a new material for the cube and set the shader to be the ```RaymarchShader``` Shader Graph and the 3D Texture to be the Nerds sliced image. Then scale that cube so the aspect ratio matches the x/y/z dimensions of the 3D Texture. In this case above, the Nerds model is 48x44x45 so an example scale shown below would be 4.8x4.4x4.5 where 0.1 units (meters) represents 1 voxel:
+To display in Unity, create a 1x1x1 Cube from the ```Context menu->3D Object->Cube```. Create a new material for the cube and set the shader to be the ```RaymarchShader``` Shader Graph and the 3D Texture to be the imported ```Nerds.(45x1).png``` sliced image. Then scale that cube so the aspect ratio matches the x/y/z dimensions of the 3D Texture. In this case above, the Nerds model is ```48x44x45``` so an example scale shown below would be ```4.8x4.4x4.5``` where ```0.1``` units (meters) represents 1 voxel:
 
 ![Cube Transform Scale](/Images/CubeTransform.png)
+
+Unity version ```2023.1.7f1``` was used to create this repository.
 
 ## Problems
 
@@ -60,11 +67,11 @@ The only way around this would be to create a shader by hand in URP but then we 
 
 ![Correct Depth Buffer](/Images/SV_DEPTH.png)
 
-HDRP seemed to show strange arifacts when rednering and warped the edges of the volume:
+HDRP seemed to show strange artifacts when rendering with warped edges of the volume:
 
 ![HDRP Warping](/Images/HDRP.png)
 
-Shadows don't seem to work properly, although I've just read that it's because the shadow map is rendered using an orthographic camera and the code doesn't current support that.
+Shadows don't seem to work properly, although I've just read that it's because the shadow map is rendered using an orthographic camera and the code doesn't currently support that.
 
 ![Incorrect Shadows](/Images/Shadows.png)
 

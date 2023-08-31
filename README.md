@@ -16,8 +16,9 @@ The key takeaways from this video were:
 - Raymarch through the texture to work out which voxel to display
 
 There were other excellent things to note that I've not included in this repository:
-- Create a scene axis aligned bitmp (1 bit per voxel) of all voxels for occlusion testing
+- Create a scene axis aligned bitmap (1 bit per voxel) of all voxels for occlusion testing
 - Use sphere colliders per voxel and only collide them when the pattern of corners/edges/faces matches up
+- Store voxels as a 1 byte index into a 256 color palette (Each model can have its own palette)
 
 ## Unity Cookbook
 
@@ -39,9 +40,15 @@ Here is the original Wizard voxel file so you can see what it looks like in 3D:
 
 ![Voxel in 3D](/Images/Wizard.gif)
 
+The [Arlorean/Voxels](https://github.com/Arlorean/Voxels) project command line utility was used to create the 3D textures. Run it with the ```--3D``` command line argument, e.g. ```Voxels.CommandLine.exe --3D Nerds.qb```.
+
 The import settings for the texture should be set to 3D, Point Filter, No MipMaps, No compression and Non-Power of 2. The Colums and Rows specify how the whole image is broken up into a grid of Z slices:
 
 ![Texture Import Settings](/Images/TextureImportSettings.png)
+
+To display in Unity, create a 1x1x1 Cube from the context menu->3D Obect->Cube. Create a new material for the cube and set the shader to be the ```RaymarchShader``` Shader Graph and the 3D Texture to be the Nerds sliced image. Then scale that cube so the aspect ratio matches the x/y/z dimensions of the 3D Texture. In this case above, the Nerds model is 48x44x45 so an example scale shown below would be 4.8x4.4x4.5 where 0.1 units (meters) represents 1 voxel:
+
+![Cube Transform Scale](/Images/CubeTransform.png)
 
 ## Problems
 
@@ -59,9 +66,11 @@ Shadows don't seem to work properly, although I've just read that it's because t
 
 ![Incorrect Shadows](/Images/Shadows.png)
 
+Unity doesn't like imported textures to be too wide (or high) so if the sliced image is very long, because it can't be divided into a grid easily, then you won't be able to display it. The workaround is to make the model larger in the front to back axis (Y in MagicaVoxel, Z in Unity), so that that number is a power of 2 or can be divided to make a roughly even grid.
+
 ## Credits
 
-[A Fast Voxel Traversal Algorithm for Ray Tracing](http://www.cse.yorku.ca/~amana/research/grid.pdf) by John Amanatides and Andrew Woo.
+[A Fast Voxel Traversal Algorithm for Ray Tracing](http://www.cse.yorku.ca/~amana/research/grid.pdf) by John Amanatides and Andrew Woo (August 1987).
 
 [Qubicle](https://store.steampowered.com/app/454550/Qubicle_Voxel_Editor/) demo Nerds model.
 

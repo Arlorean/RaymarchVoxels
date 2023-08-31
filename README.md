@@ -27,11 +27,21 @@ URP was chosen so as to eventually be able to display this in WebGL.
 
 The modified Shader Graph uses the ```View Direction``` node instead of the camera node (I was trying to get shadows to work). The underlying shader calulates the RawDepth (```SV_Depth```) but there is no where to feed it into the URP Fragment lighting block at the end.
 
-![Demo Scene](/Images/ShaderGraph.png)
+![Shader Graph](/Images/ShaderGraph.png)
 
 ## Voxel to 3D Texture
 
+3D Textures in Unity can be created from a single image that is split into a grid of slices, similar to a sprite sheet. The slices are down the Z axis in Unity:
 
+![Slices](/Images/WizardSlices.png)
+
+Here is the original Wizard voxel file so you can see what it looks like in 3D:
+
+![Voxel in 3D](/Images/Wizard.gif)
+
+The import settings for the texture should be set to 3D, Point Filter, No MipMaps, No compression and Non-Power of 2. The Colums and Rows specify how the whole image is broken up into a grid of Z slices:
+
+![Texture Import Settings](/Images/TextureImportSettings.png)
 
 ## Problems
 

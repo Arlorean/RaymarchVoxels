@@ -54,9 +54,11 @@ To display in Unity, create a 1x1x1 Cube from the context menu->3D Obect->Cube. 
 
 URP Shader Graph doesn't have the ability to override the depth (```SV_DEPTH```) of a fragment which means the depth of every pixel is just the depth of the back face of the rendered cube. This has implications for things like screen space effects that rely on the depth map being correct.
 
+![Default Depth Buffer](/Images/DefaultCubeDepth.png)
+
 The only way around this would be to create a shader by hand in URP but then we would lose all the built-in lighting effects provided by the URP Fragment block. I did try coping the generated shader code and adding in the depth by it was fragile. Here is the depth buffer from the Unity Frame Debugger showing it working:
 
-![Depth Buffer](/Images/SV_DEPTH.png)
+![Correct Depth Buffer](/Images/SV_DEPTH.png)
 
 HDRP seemed to show strange arifacts when rednering and warped the edges of the volume:
 
@@ -66,7 +68,7 @@ Shadows don't seem to work properly, although I've just read that it's because t
 
 ![Incorrect Shadows](/Images/Shadows.png)
 
-Unity doesn't like imported textures to be too wide (or high) so if the sliced image is very long, because it can't be divided into a grid easily, then you won't be able to display it. The workaround is to make the model larger in the front to back axis (Y in MagicaVoxel, Z in Unity), so that that number is a power of 2 or can be divided to make a roughly even grid.
+Unity doesn't like imported textures to be too wide (or high) so if the sliced image is very long, because it can't be divided into a grid easily, then you won't be able to display it. The workaround is to make the model larger in the front to back axis (Y in MagicaVoxel, Z in Unity), so that that depth is a power of 2 or can be divided to make a roughly even grid.
 
 ## Credits
 

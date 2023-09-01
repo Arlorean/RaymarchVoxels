@@ -2,7 +2,7 @@
 
 Render voxel models in Unity URP by rendering a cube volume and raymarching a 3D texture to display the voxels.
 
-![Demo Scene](/Images/DemoScene.png)
+[![WebGL Demo Scene](/Images/DemoScene.png)](https://arlorean.github.io/RaymarchVoxels/)
 
 ## Teardown Inspiration
 

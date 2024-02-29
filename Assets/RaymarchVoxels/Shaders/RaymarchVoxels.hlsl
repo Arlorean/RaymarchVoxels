@@ -46,7 +46,7 @@ void RaymarchVoxels_float(
 	int3 step = sign(direction);
 
 	// The first voxel where the ray enters - tracks voxels passed through in loop below
-	int3 v = p;
+	int3 v = floor(p);
 
 	// TDelta indicates how far along the ray we must move (in units of t) for the component of such a movement to equal the width of a voxel
 	float3 tDelta = abs(1.0 / d);
